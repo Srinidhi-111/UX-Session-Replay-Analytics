@@ -32,7 +32,7 @@ export function SessionList() {
       <Virtuoso
         style={{ height: '100%' }}
         data={sessions}
-        itemContent={(index, session) => (
+        itemContent={(_index, session) => (
           <div
             key={session.id}
             className="flex justify-between items-center p-4 border-b border-gray-800 text-white hover:bg-gray-900 cursor-pointer"
