@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import type { Session } from './types';
+import { ReplayViewer } from './ReplayViewer';
 
 export function SessionList() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/sessions`)
@@ -35,12 +37,13 @@ export function SessionList() {
         itemContent={(_index, session) => (
           <div
             key={session.id}
+            onClick={() => setSelectedSessionId(session.id)}
             className="flex justify-between items-center p-4 border-b border-gray-800 text-white hover:bg-gray-900 cursor-pointer"
           >
             <div>
               <div className="font-medium">{session.page_url}</div>
               <div className="text-sm text-gray-400">
-                {new Date(session.start_time).toLocaleString()}
+                {new Date(session.start_time + 'Z').toLocaleString()}
               </div>
             </div>
             <div
@@ -55,6 +58,13 @@ export function SessionList() {
           </div>
         )}
       />
+
+      {selectedSessionId && (
+        <ReplayViewer
+          sessionId={selectedSessionId}
+          onClose={() => setSelectedSessionId(null)}
+        />
+      )}
     </div>
   );
 }

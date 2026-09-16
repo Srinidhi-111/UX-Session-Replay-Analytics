@@ -1,3 +1,4 @@
+import * as rrweb from 'rrweb';
 import { createRageClickDetector } from './rageClickDetector';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -9,16 +10,32 @@ function getElementId(el: Element): string {
   return el.id || el.tagName + (el.className ? `.${el.className}` : '');
 }
 
+// --- Existing rage-click tracking ---
 document.addEventListener('click', (e) => {
   const elementId = getElementId(e.target as Element);
-  const isRageClick = detector.registerClick({
+  const severity = detector.registerClick({
     elementId,
     x: e.clientX,
     y: e.clientY,
     timestamp: Date.now(),
   });
 
-  eventBuffer.push({ type: isRageClick ? 'rage_click' : 'click', elementId });
+  eventBuffer.push({
+    source: 'custom',
+    type: severity !== 'none' ? 'rage_click' : 'click',
+    elementId,
+    x: e.clientX,
+    y: e.clientY,
+    severity,
+    timestamp: Date.now(),
+  });
+});
+
+// --- New: rrweb DOM recording ---
+rrweb.record({
+  emit(event) {
+    eventBuffer.push({ source: 'rrweb', event });
+  },
 });
 
 function sendEvents() {
@@ -37,6 +54,5 @@ function sendEvents() {
   eventBuffer = [];
 }
 
-// Send every 3 seconds, and also on page close
 setInterval(sendEvents, 3000);
 window.addEventListener('beforeunload', sendEvents);
