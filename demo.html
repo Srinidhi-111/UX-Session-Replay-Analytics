@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rage-Click Test Page</title>
+  <style>
+    body {
+      background: #0a0a0f;
+      color: white;
+      font-family: sans-serif;
+      padding: 40px;
+    }
+    button {
+      display: block;
+      margin: 20px 0;
+      padding: 16px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+    #checkout-btn {
+      background: #ef4444;
+      color: white;
+    }
+    #normal-btn {
+      background: #374151;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Session Replay Test Page</h1>
+  <p>Use this page to generate test sessions without affecting the dashboard's own data.</p>
+
+  <button id="checkout-btn">Broken Checkout Button (click me rapidly!)</button>
+  <button id="normal-btn">Normal Button</button>
+
+  <p>Scroll down and click around for more realistic test data.</p>
+  <div style="height: 800px;"></div>
+  <button id="bottom-btn">Bottom Button</button>
+
+  <script type="module" src="/src/trackingScript.ts"></script>
+</body>
+</html>

@@ -12,8 +12,12 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "cmdk": "^1.1.1",
+    "framer-motion": "^13.4.6",
+    "lucide-react": "^1.48.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
     "react-virtuoso": "^4.18.13",
     "rrweb": "^2.1.4",
     "rrweb-player": "^2.1.4"
