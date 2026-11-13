@@ -2,46 +2,360 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Rage-Click Test Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kiln &amp; Co. · Demo Store</title>
   <style>
+    :root {
+      --bg: #faf7f2;
+      --card: #ffffff;
+      --ink: #1f1b16;
+      --muted: #6b6259;
+      --line: #e8e1d6;
+      --accent: #b4532a;
+      --accent-dark: #8f3f1e;
+      --guide: #111827;
+    }
+    * { box-sizing: border-box; }
     body {
-      background: #0a0a0f;
-      color: white;
-      font-family: sans-serif;
-      padding: 40px;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
     }
-    button {
-      display: block;
-      margin: 20px 0;
-      padding: 16px 24px;
-      font-size: 16px;
-      border-radius: 8px;
+    a { color: inherit; }
+    button { font: inherit; cursor: pointer; }
+
+    /* Demo ribbon */
+    .ribbon {
+      background: var(--guide);
+      color: #e5e7eb;
+      text-align: center;
+      font-size: 13px;
+      padding: 8px 16px;
+    }
+    .ribbon strong { color: #fca5a5; }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 40px;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .logo { font-weight: 700; font-size: 20px; letter-spacing: 0.5px; }
+    .logo span { color: var(--accent); }
+    nav { display: flex; gap: 24px; font-size: 14px; color: var(--muted); }
+    nav a { text-decoration: none; }
+    nav a:hover { color: var(--ink); }
+    .cart-pill {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+    .cart-pill b { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 56px 40px 40px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+    .hero h1 { font-size: 44px; line-height: 1.1; margin: 12px 0 16px; }
+    .hero p { color: var(--muted); max-width: 460px; margin: 0 0 24px; }
+    .btn {
+      display: inline-block;
       border: none;
-      cursor: pointer;
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-weight: 600;
+      text-decoration: none;
     }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-dark); }
+
+    /* Layout: products + cart */
+    .shop {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 32px;
+      padding: 16px 40px 64px;
+      max-width: 1180px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    .section-title { font-size: 22px; margin: 0 0 16px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .product {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .product .img { height: 160px; }
+    .img-mug { background: radial-gradient(ellipse at 50% 60%, #c46b45 0 46px, transparent 47px), linear-gradient(#f3e9dc, #ead9c4); }
+    .img-lamp { background: radial-gradient(circle at 50% 38%, #f6d58b 0 34px, transparent 35px), linear-gradient(to bottom, transparent 55%, #6b5a48 55% 58%, transparent 58%), linear-gradient(#efe8df, #e3d8ca); }
+    .img-vase { background: radial-gradient(ellipse at 50% 62%, #7f9c86 0 32px, transparent 33px), radial-gradient(ellipse at 50% 38%, #7f9c86 0 16px, transparent 17px), linear-gradient(#eef0e8, #dfe3d6); }
+    .product .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .product h3 { margin: 0; font-size: 16px; }
+    .product .desc { color: var(--muted); font-size: 13px; flex: 1; }
+    .product .row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+    .price { font-weight: 700; }
+    .add-btn {
+      border: 1px solid var(--ink);
+      background: transparent;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .add-btn:hover { background: var(--ink); color: #fff; }
+
+    /* Cart */
+    .cart {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      position: sticky;
+      top: 90px;
+    }
+    .cart h2 { margin: 0 0 12px; font-size: 18px; }
+    .cart-items { list-style: none; margin: 0; padding: 0; font-size: 14px; }
+    .cart-items li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+    .cart-empty { color: var(--muted); font-size: 14px; }
+    .cart-total { display: flex; justify-content: space-between; font-weight: 700; margin: 14px 0 16px; }
+    .field { display: flex; gap: 8px; margin-bottom: 12px; }
+    .field input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 14px;
+    }
+    .field button { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 8px 12px; font-size: 13px; }
     #checkout-btn {
-      background: #ef4444;
-      color: white;
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
     }
-    #normal-btn {
-      background: #374151;
-      color: white;
+    #checkout-btn:hover { background: var(--accent-dark); }
+    .secure { text-align: center; font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 40px 80px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    #normal-btn, #bottom-btn {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+
+    /* Guide card for reviewers (sits in the hero) */
+    .guide {
+      background: var(--guide);
+      color: #e5e7eb;
+      border-radius: 20px;
+      padding: 22px 22px 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+      font-size: 14px;
+    }
+    .guide-head { margin-bottom: 10px; }
+    .guide-head strong { color: #fff; font-size: 16px; }
+    .guide ol { margin: 0; padding-left: 20px; }
+    .guide li { margin-bottom: 8px; }
+    .guide .hl { color: #fca5a5; font-weight: 600; }
+    .guide-link {
+      display: block;
+      text-align: center;
+      background: #f9fafb;
+      color: var(--guide);
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 6px;
+    }
+    .guide-note { color: #9ca3af; font-size: 12px; margin: 10px 0 0; }
+
+    /* Small floating shortcut to the dashboard */
+    .dash-pill {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      background: var(--guide);
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 10px 16px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      z-index: 20;
+    }
+
+    @media (max-width: 900px) {
+      header { padding: 14px 16px; }
+      nav { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 32px 16px 24px; }
+      .hero h1 { font-size: 34px; }
+      .shop { grid-template-columns: 1fr; padding: 8px 16px 48px; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .cart { position: static; }
+      footer { padding: 24px 16px 80px; }
+      .dash-pill { display: none; }
+    }
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <h1>Session Replay Test Page</h1>
-  <p>Use this page to generate test sessions without affecting the dashboard's own data.</p>
-  <p>Click the red button 5+ times quickly, then open the
-  <a href="/" target="_blank" style="color:#60a5fa">dashboard</a>
-  to watch your session and rage click appear live.</p>
-  <button id="checkout-btn">Broken Checkout Button (click me rapidly!)</button>
-  <button id="normal-btn">Normal Button</button>
+  <div class="ribbon">This is a <strong>demo store</strong> for testing UX Session Replay Analytics. Nothing here is for sale.</div>
 
-  <p>Scroll down and click around for more realistic test data.</p>
-  <div style="height: 800px;"></div>
-  <button id="bottom-btn">Bottom Button</button>
+  <header>
+    <div class="logo">Kiln<span>&amp;</span>Co.</div>
+    <nav>
+      <a href="#shop">Shop</a>
+      <a href="#shop">Ceramics</a>
+      <a href="#shop">Lighting</a>
+      <a href="#about">About</a>
+    </nav>
+    <div class="cart-pill">Cart <b id="cart-count">0</b></div>
+  </header>
 
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Handmade in small batches</div>
+      <h1>Everyday pieces for a slower, warmer home.</h1>
+      <p>Stoneware mugs, soft-glow lamps and vases, each shaped by hand. Pick a few favourites and check out in seconds.</p>
+      <a href="#shop" class="btn btn-primary">Shop the collection</a>
+    </div>
+    <div class="guide" id="guide">
+      <div class="guide-head"><strong>How to test this demo</strong></div>
+      <ol>
+        <li>Add an item to the cart. This page is being recorded as you use it.</li>
+        <li>Click <span class="hl">Place order</span> 5 or more times quickly. It's broken on purpose, like a real bug that frustrates shoppers.</li>
+        <li>Open the dashboard to see your session, the rage-click alert and a replay of what you just did.</li>
+      </ol>
+      <a class="guide-link" href="/" target="_blank" rel="noopener">Open the dashboard ↗</a>
+      <p class="guide-note">The free server sleeps when idle, so your first session may take up to a minute to appear.</p>
+    </div>
+  </section>
+
+  <main class="shop" id="shop">
+    <div>
+      <h2 class="section-title">Bestsellers</h2>
+      <div class="grid">
+        <article class="product">
+          <div class="img img-mug" aria-hidden="true"></div>
+          <div class="body">
+            <h3>Terracotta Mug</h3>
+            <div class="desc">350 ml stoneware with a matte glaze.</div>
+            <div class="row"><span class="price">₹649</span><button class="add-btn" data-name="Terracotta Mug" data-price="649">Add to cart</button></div>
+          </div>
+        </article>
+        <article class="product">
+          <div class="img img-lamp" aria-hidden="true"></div>
+          <div class="body">
+            <h3>Glow Table Lamp</h3>
+            <div class="desc">Warm 2700K light with a linen shade.</div>
+            <div class="row"><span class="price">₹2,499</span><button class="add-btn" data-name="Glow Table Lamp" data-price="2499">Add to cart</button></div>
+          </div>
+        </article>
+        <article class="product">
+          <div class="img img-vase" aria-hidden="true"></div>
+          <div class="body">
+            <h3>Sage Bud Vase</h3>
+            <div class="desc">Small hand-thrown vase for single stems.</div>
+            <div class="row"><span class="price">₹899</span><button class="add-btn" data-name="Sage Bud Vase" data-price="899">Add to cart</button></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <aside class="cart">
+      <h2>Your cart</h2>
+      <p class="cart-empty" id="cart-empty">Your cart is empty. Add something from the left.</p>
+      <ul class="cart-items" id="cart-items"></ul>
+      <div class="cart-total"><span>Total</span><span id="cart-total">₹0</span></div>
+      <div class="field">
+        <input type="text" placeholder="Coupon code" aria-label="Coupon code" />
+        <button type="button" id="normal-btn">Apply</button>
+      </div>
+      <!-- Intentionally broken: this button does nothing, so frustrated users rage-click it. -->
+      <button type="button" id="checkout-btn">Place order</button>
+      <div class="secure">Secure checkout · Free delivery over ₹999</div>
+    </aside>
+  </main>
+
+  <footer id="about">
+    <span>© Kiln &amp; Co. A fictional store made for testing.</span>
+    <button type="button" id="bottom-btn">Contact us</button>
+  </footer>
+
+  <a class="dash-pill" href="/" target="_blank" rel="noopener">Open dashboard ↗</a>
+
+  <script>
+    // Simple working cart, so the broken checkout stands out.
+    const cart = [];
+    const countEl = document.getElementById('cart-count');
+    const itemsEl = document.getElementById('cart-items');
+    const emptyEl = document.getElementById('cart-empty');
+    const totalEl = document.getElementById('cart-total');
+    const rupees = (n) => '₹' + n.toLocaleString('en-IN');
+
+    function renderCart() {
+      countEl.textContent = cart.length;
+      emptyEl.style.display = cart.length ? 'none' : 'block';
+      itemsEl.innerHTML = cart.map((i) => `<li><span>${i.name}</span><span>${rupees(i.price)}</span></li>`).join('');
+      totalEl.textContent = rupees(cart.reduce((sum, i) => sum + i.price, 0));
+    }
+
+    document.querySelectorAll('.add-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        cart.push({ name: btn.dataset.name, price: Number(btn.dataset.price) });
+        renderCart();
+      });
+    });
+
+  </script>
   <script type="module" src="/src/trackingScript.ts"></script>
 </body>
 </html>
