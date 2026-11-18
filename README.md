@@ -38,16 +38,6 @@ UX Session Replay Analytics records how real visitors use a website, automatical
 
 ## How it works
 
-```mermaid
-flowchart LR
-    A[Website visitor] -->|clicks, scrolls, DOM changes| B[Tracking script]
-    B -->|batched events| C[FastAPI backend]
-    C --> D[(PostgreSQL)]
-    C -->|rage-click detection| D
-    C -->|live updates over WebSockets| E[React dashboard]
-    D -->|sessions, alerts, replays| E
-```
-
 1. **Record.** The tracking script runs on the website being monitored. It uses [rrweb](https://github.com/rrweb-io/rrweb) to capture the page and user actions, and sends events to the backend in small batches.
 2. **Detect.** The backend stores the events and runs the rage-click detector on incoming clicks.
 3. **Show.** The dashboard reads sessions, alerts and replays from the backend's REST API, and receives live updates over a WebSocket connection.
