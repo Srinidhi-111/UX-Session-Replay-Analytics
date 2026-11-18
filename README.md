@@ -5,7 +5,6 @@
 UX Session Replay Analytics records how real visitors use a website, automatically detects signs of frustration such as **rage clicks** (clicking the same spot again and again when nothing happens), and shows the results on a live dashboard with heatmaps, severity alerts and full session replays.
 
 🔗 **Try the demo:** https://ux-session-replay-analytics.vercel.app/demo.html
-
 📊 **Dashboard:** https://ux-session-replay-analytics.vercel.app
 
 > A patent application has been filed (2026) for the rage-click detection system used in this project.
@@ -37,6 +36,13 @@ UX Session Replay Analytics records how real visitors use a website, automatical
 ---
 
 ## How it works
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-dark.png">
+    <img src="docs/architecture-light.png" alt="Diagram: website visitor, tracking script, FastAPI backend, PostgreSQL and React dashboard" width="640">
+  </picture>
+</p>
 
 1. **Record.** The tracking script runs on the website being monitored. It uses [rrweb](https://github.com/rrweb-io/rrweb) to capture the page and user actions, and sends events to the backend in small batches.
 2. **Detect.** The backend stores the events and runs the rage-click detector on incoming clicks.
