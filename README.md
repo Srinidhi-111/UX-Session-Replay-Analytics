@@ -38,10 +38,8 @@ UX Session Replay Analytics records how real visitors use a website, automatical
 ## How it works
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-dark.png">
-    <img src="docs/architecture-light.png" alt="Diagram: website visitor, tracking script, FastAPI backend, PostgreSQL and React dashboard" width="640">
-  </picture>
+  <img src="docs/architecture-light.png#gh-light-mode-only" alt="Diagram: website visitor, tracking script, FastAPI backend, PostgreSQL and React dashboard" width="640">
+  <img src="docs/architecture-dark.png#gh-dark-mode-only" alt="Diagram: website visitor, tracking script, FastAPI backend, PostgreSQL and React dashboard" width="640">
 </p>
 
 1. **Record.** The tracking script runs on the website being monitored. It uses [rrweb](https://github.com/rrweb-io/rrweb) to capture the page and user actions, and sends events to the backend in small batches.
